@@ -9,10 +9,19 @@
     <title></title>
 
     <script charset="utf-8" src="cuber/src/scripts/extras/controls/locked.js"></script>
+    <script charset="utf-8" src="cuber/src/scripts/extras/renderers/iecss3d.js"></script>
+    <script charset="utf-8" src="cuber/src/scripts/extras/renderers/ierenderer.js"></script>
 
     <script type="text/javascript">
         $(function() {
-            window.cube = new ERNO.Cube({controls: ERNO.Locked});
+            var ua = navigator.userAgent;
+            var isIe = ua.indexOf('MSIE') > -1 || ua.indexOf('Trident/') > -1;
+
+            window.cube = new ERNO.Cube({
+                hideInvisibleFaces: true,
+                controls: ERNO.Locked,
+                renderer: isIe ? ERNO.renderers.IeCSS3D : null
+            });
             document.getElementById('container').appendChild( cube.domElement );
 
             var fixedOrientation = new THREE.Euler(  Math.PI * 0.1, Math.PI * -0.25, 0 );
