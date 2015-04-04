@@ -1,31 +1,27 @@
 function changeCube() {
     //cube.twistDuration = 0
-    cube.twist("Z");
-    //var zTwist = new ERNO.Twist("Z");
-    //cube.immediateTwist(zTwist);
+    switch(currentStep) {
+        case 1:
+            cube.twist("Z");
 
-    var g = new ERNO.Group()
-    g.add(cube.corners)
-    g.add(cube.cubelets[1], cube.cubelets[5], cube.cubelets[7], cube.cubelets[11], cube.cubelets[14], cube.cubelets[17], cube.cubelets[19], cube.cubelets[23], cube.cubelets[25])
-    //g.setOpacity(0.1)
-    immediateSetOpacity(g, 0.1);
+            var g = new ERNO.Group()
+            g.add(cube.corners)
+            g.add(cube.cubelets[1], cube.cubelets[5], cube.cubelets[7], cube.cubelets[11], cube.cubelets[14], cube.cubelets[17], cube.cubelets[19], cube.cubelets[23], cube.cubelets[25])
+            immediateSetOpacity(g, 0.1);
+            break;
+        case 2:
+            cube.twist("z");
 
-    //setTimeout(cube.twistDuration = 200, 500);
-}
+            var g = new ERNO.Group()
+            g.add(cube.cubelets[2], cube.cubelets[8], cube.cubelets[20], cube.cubelets[26]);
+            immediateSetOpacity(g, 0.1);
+            break;
+        case 3:
+            cube.twist("z");
+            break;
+    }
 
-function changeCube2() {
-    //cube.twistDuration = 0
-    cube.twist("z");
-    //var zTwist = new ERNO.Twist("Z");
-    //cube.immediateTwist(zTwist);
 
-    var g = new ERNO.Group()
-    g.add(cube.corners)
-    g.add(cube.cubelets[1], cube.cubelets[5], cube.cubelets[7], cube.cubelets[11], cube.cubelets[14], cube.cubelets[17], cube.cubelets[19], cube.cubelets[23], cube.cubelets[25])
-    //g.setOpacity(0.1)
-    immediateSetOpacity(g, 0.1);
-
-    //setTimeout(cube.twistDuration = 200, 500);
 }
 
 function immediateSetOpacity(group, opacity){
@@ -35,7 +31,7 @@ function immediateSetOpacity(group, opacity){
     return this
 }
 
-function isGreenFaceSolved() {
+function isGreenCrossSolved() {
     var greenFace = getGreenFace();
     var middleGreen = greenFace.center.cubelets[0];
 

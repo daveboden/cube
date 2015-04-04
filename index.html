@@ -15,6 +15,8 @@
     <script src="custom.js"></script>
 
     <script type="text/javascript">
+        var currentStep = 1;
+
         $(function() {
             resetCube();
         });
@@ -32,7 +34,7 @@
             //Keep the green centre at the top when shuffling
             cube.shuffleMethod = "RrLlUuDdBbFf";
 
-            var fixedOrientation = new THREE.Euler(  Math.PI * 0.1, Math.PI * -0.25, 0 );
+            var fixedOrientation = new THREE.Euler(  Math.PI * 0.1, Math.PI * +0.13, 0 );
             cube.object3D.lookAt( cube.camera.position );
             cube.rotation.x += fixedOrientation.x;
             cube.rotation.y += fixedOrientation.y;
@@ -47,7 +49,7 @@
 
                 document.getElementById('container').appendChild( cube.domElement );
 
-                var solved = isGreenFaceSolved();
+                var solved = isGreenCrossSolved();
                 var colorOfBar = solved ? "palegreen" : "orangered";
                 $("#progressBar").css("backgroundColor", colorOfBar);
                 $("#progressBar").text(solved ? "Green cross is solved" : "Solve the green cross first");
@@ -57,16 +59,88 @@
             changeCube();
 
         }
+
+        function stepGreenCross() {
+            currentStep = 1;
+            resetCube();
+        }
+
+        function stepBlueCross() {
+            currentStep = 2;
+            resetCube();
+        }
+
+        function stepFinalCorners() {
+            currentStep = 3;
+            resetCube();
+        }
+
+        //Shuffles the cube in an appropriate way depending on what step we're on.
+        function shuffleCube() {
+            switch(currentStep) {
+                case 1:
+                    //Relies on the fact that the shuffle method has been set when the cube was setup
+                    //so that we don't disturb the green centre's position.
+                    cube.shuffle();
+                    break;
+                case 2:
+                    var sequence = clockFaceAlgorithmMoves + clockFaceAlgorithmMoves + "u" + clockFaceAlgorithmMoves;
+                    cube.shuffle(sequence.length, sequence);
+                    break;
+                case 3:
+                    var sequence = leftHandSnakeAlgorithmMoves + "y" + leftHandSnakeAlgorithmMoves;
+                    cube.shuffle(sequence.length, sequence);
+                    break;
+            }
+        }
+
+        var clockFaceAlgorithmMoves = "FRUruf";
+        function clockFaceAlgorithm() {
+            cube.twist(clockFaceAlgorithmMoves);
+        }
+
+        var rightHandAlgorithmMoves = "RUUruRuru";
+        function rightHandAlgorithm() {
+            cube.twist(rightHandAlgorithmMoves);
+        }
+
+        var leftHandSnakeAlgorithmMoves = "lURuLUru";
+        function leftHandSnakeAlgorithm() {
+            cube.twist(leftHandSnakeAlgorithmMoves);
+        }
+
+        var finalAlgorithmMoves = "rdRD"
+        function finalAlgorithm() {
+            cube.twist(finalAlgorithmMoves);
+        }
+
     </script>
 
 </head>
 <body class="graydient">
 <div id="progressBar" style="width: 100%; height: 30px; font-size: x-large; text-align: center; color: black; padding-top: 10px"></div>
+<div id="stepsBar" style="width: 100%; height: 30px; font-size: x-large; text-align: center; color: black; padding-top: 10px">
+    <input type="button" style="font-size: x-large" onclick="stepGreenCross()" value="Step 1: Green Cross">
+    <input type="button" style="font-size: x-large" onclick="stepBlueCross()" value="Step 2: Blue Cross">
+    <input type="button" style="font-size: x-large" onclick="stepFinalCorners()" value="Step 3: Final corners">
+</div>
 <div>
     <p style="font-size: large">
     <input type="button" style="font-size: x-large" onclick="resetCube()" value="Reset cube">
-    <input type="button" style="font-size: x-large" onclick="cube.shuffle()" value="Shuffle cube">
+    <input type="button" style="font-size: x-large" onclick="shuffleCube()" value="Shuffle cube">
     <span style="padding-left: 20px">Use your keyboard: (left, right, up, down, front, back) (l L r R u U d D f F b B) and whole cube (x X y Y z Z)</span>
+    </p>
+</div>
+<div class="blueCrossButtons">
+    <p>
+    <input type="button" style="font-size: x-large" onclick="clockFaceAlgorithm()" value="Clock Face algorithm">
+    <input type="button" style="font-size: x-large" onclick="rightHandAlgorithm()" value="Right Hand algorithm">
+    </p>
+</div>
+<div class="finalCornersButtons">
+    <p>
+        <input type="button" style="font-size: x-large" onclick="leftHandSnakeAlgorithm()" value="Left Hand Snake algorithm">
+        <input type="button" style="font-size: x-large" onclick="finalAlgorithm()" value="Final algorithm">
     </p>
 </div>
 <div id="container" ></div>

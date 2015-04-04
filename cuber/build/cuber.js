@@ -11672,6 +11672,7 @@ ERNO.extend( ERNO.Cube.prototype, {
 		//	Create some random rotations based on our shuffle method
 		while( amount-- > 0 ){
 			if (sequence){
+				move = new ERNO.Twist(); //TODO - This is missing. Report as a bug.
 				move.set(sequence[sequenceIndex]);
 				sequenceIndex = (sequenceIndex + 1) % sequenceLength;
 			} else {
