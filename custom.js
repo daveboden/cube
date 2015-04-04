@@ -1,13 +1,38 @@
 function changeCube() {
-    cube.twistDuration = 0
+    //cube.twistDuration = 0
     cube.twist("Z");
+    //var zTwist = new ERNO.Twist("Z");
+    //cube.immediateTwist(zTwist);
 
     var g = new ERNO.Group()
     g.add(cube.corners)
     g.add(cube.cubelets[1], cube.cubelets[5], cube.cubelets[7], cube.cubelets[11], cube.cubelets[14], cube.cubelets[17], cube.cubelets[19], cube.cubelets[23], cube.cubelets[25])
-    g.setOpacity(0.1)
+    //g.setOpacity(0.1)
+    immediateSetOpacity(g, 0.1);
 
-    setTimeout(cube.twistDuration = 200, 500);
+    //setTimeout(cube.twistDuration = 200, 500);
+}
+
+function changeCube2() {
+    //cube.twistDuration = 0
+    cube.twist("z");
+    //var zTwist = new ERNO.Twist("Z");
+    //cube.immediateTwist(zTwist);
+
+    var g = new ERNO.Group()
+    g.add(cube.corners)
+    g.add(cube.cubelets[1], cube.cubelets[5], cube.cubelets[7], cube.cubelets[11], cube.cubelets[14], cube.cubelets[17], cube.cubelets[19], cube.cubelets[23], cube.cubelets[25])
+    //g.setOpacity(0.1)
+    immediateSetOpacity(g, 0.1);
+
+    //setTimeout(cube.twistDuration = 200, 500);
+}
+
+function immediateSetOpacity(group, opacity){
+    group.cubelets.forEach( function( cubelet ) {
+        cubelet.css3DObject.element.style.opacity =  opacity;
+    })
+    return this
 }
 
 function isGreenFaceSolved() {
@@ -43,18 +68,3 @@ function getGreenFace() {
         }
     }
 };
-
-$(function() {
-    //Keep the green centre at the top when shuffling
-    cube.shuffleMethod = "RrLlUuDdBbFf"
-
-    //Put green on top and make irelevant cubelets transparent.
-    changeCube();
-
-    cube.addEventListener("onTwistComplete", function () {
-        var solved = isGreenFaceSolved();
-        var colorOfBar = solved ? "palegreen" : "orangered";
-        $("#progressBar").css("backgroundColor", colorOfBar);
-        $("#progressBar").text(solved ? "Green cross is solved" : "Solve the green cross first");
-    }, false);
-});

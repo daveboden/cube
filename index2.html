@@ -32,13 +32,17 @@
             //Keep the green centre at the top when shuffling
             cube.shuffleMethod = "RrLlUuDdBbFf";
 
-            var fixedOrientation = new THREE.Euler(  Math.PI * 0.1, Math.PI * -0.25, 0 );
+            var fixedOrientation = new THREE.Euler(  Math.PI * 0.1, Math.PI * +0.13, 0 );
             cube.object3D.lookAt( cube.camera.position );
             cube.rotation.x += fixedOrientation.x;
             cube.rotation.y += fixedOrientation.y;
             cube.rotation.z += fixedOrientation.z;
 
             $("div.cube").remove();
+
+            var g = new ERNO.Group()
+            g.add(cube.cubelets[2], cube.cubelets[8], cube.cubelets[20], cube.cubelets[26]);
+            immediateSetOpacity(g, 0.1);
 
             cube.addEventListener("onTwistComplete", function() {
                 //Fires when changeCube() is complete
@@ -47,15 +51,25 @@
 
                 document.getElementById('container').appendChild( cube.domElement );
 
+
                 var solved = isGreenFaceSolved();
                 var colorOfBar = solved ? "palegreen" : "orangered";
                 $("#progressBar").css("backgroundColor", colorOfBar);
                 $("#progressBar").text(solved ? "Green cross is solved" : "Solve the green cross first");
             }, false);
 
-            //Put green on top and make irrelevant cubelets transparent.
-            changeCube();
+            cube.twist("z");
+            //var zTwist = new ERNO.Twist("Z");
+            //cube.immediateTwist(zTwist);
 
+        }
+
+        function clockFaceAlgorithm() {
+            cube.twist("FRUruf");
+        }
+
+        function rightHandAlgorighm() {
+            cube.twist("RUUruRuru");
         }
     </script>
 
@@ -66,6 +80,8 @@
     <p style="font-size: large">
     <input type="button" style="font-size: x-large" onclick="resetCube()" value="Reset cube">
     <input type="button" style="font-size: x-large" onclick="cube.shuffle()" value="Shuffle cube">
+    <input type="button" style="font-size: x-large" onclick="clockFaceAlgorithm()" value="Clock Face algorithm">
+    <input type="button" style="font-size: x-large" onclick="rightHandAlgorighm()" value="Right Hand algorithm">
     <span style="padding-left: 20px">Use your keyboard: (left, right, up, down, front, back) (l L r R u U d D f F b B) and whole cube (x X y Y z Z)</span>
     </p>
 </div>
